@@ -7,8 +7,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Setter
 @Document
-public class CreateUserResponse {
-    private String name;
+public class CreateUserRequest {
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
     private String phone;

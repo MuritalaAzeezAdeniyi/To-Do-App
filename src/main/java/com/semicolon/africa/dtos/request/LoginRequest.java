@@ -7,10 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Setter
 @Document
-public class UpdateUserRequest{
-    private String firstName;
-    private String lastName;
+public class LoginRequest {
     private String email;
-    private String phone;
     private String password;
+
 }

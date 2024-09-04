@@ -1,2 +1,11 @@
-package com.semicolon.africa.dtos.response;public class ApiResponse {
+package com.semicolon.africa.dtos.response;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class ApiResponse {
+    boolean success;
+    Object userResponse;
 }

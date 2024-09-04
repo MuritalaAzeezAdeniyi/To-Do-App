@@ -5,8 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateUserResponse {
+public class DeleteUserResponse {
     private String message;
-    private String email;
-    private String id;
 }
