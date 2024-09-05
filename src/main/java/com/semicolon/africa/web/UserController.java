@@ -6,6 +6,7 @@ import com.semicolon.africa.dtos.request.DeleteUserRequest;
 import com.semicolon.africa.dtos.request.LoginRequest;
 import com.semicolon.africa.dtos.request.UpdateUserRequest;
 import com.semicolon.africa.dtos.response.*;
+import com.semicolon.africa.services.EmailSenderServices;
 import com.semicolon.africa.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     private UserService userService;
-
+    @Autowired
+     private EmailSenderServices emailServices;
     @PostMapping("/signUp")
 
     public ResponseEntity<?> signUp(@RequestBody CreateUserRequest createUserRequest) {
@@ -59,4 +61,12 @@ public class UserController {
 
         }
    }
+
+    @PostMapping("/confirm")
+    public String  confirm(@RequestBody String email,String otp) {
+
+         return  emailServices.confirmOTP(otp,email);
+
+    }
+
 }
