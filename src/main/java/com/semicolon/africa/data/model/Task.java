@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Setter
 @Document
 public class Task {
-     @Id
+    @Id
     private String id;
     private String title;
     private String note;

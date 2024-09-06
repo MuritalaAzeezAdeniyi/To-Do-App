@@ -8,7 +8,6 @@ import com.semicolon.africa.dtos.request.AddTaskRequest;
 import com.semicolon.africa.dtos.response.AddTaskResponse;
 import com.semicolon.africa.exeception.LoginException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,11 +18,12 @@ public class TaskServiceImpl implements TaskService {
     private UserRepos  userRepos ;
     @Autowired
     private TaskRepo taskRepository ;
+
     @Override
     public AddTaskResponse addTask(AddTaskRequest addTaskRequest) {
         try {
             User user = userRepos.findUsersByEmail(addTaskRequest.getUseEmail());
-            if (user != null && user.isLoggedIn() == true) {
+            if (user != null && user.isLoggedIn()) {
                 Task newTask = new Task();
                 newTask.setTitle(addTaskRequest.getTitle());
                 newTask.setNote(addTaskRequest.getNote());
@@ -38,8 +38,7 @@ public class TaskServiceImpl implements TaskService {
 
             }
 
-        }catch (IncorrectResultSizeDataAccessException ignored) {
-
+        }catch (LoginException ignored) {
 
         }
         throw new LoginException("User is not logged in");

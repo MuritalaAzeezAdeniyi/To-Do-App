@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TaskController {
     @Autowired
     private TaskService taskService;
+
     @PostMapping("/addTask")
     public ResponseEntity<?> addTask(@RequestBody AddTaskRequest addTaskRequest) {
         try {
@@ -24,4 +25,6 @@ public class TaskController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
 }
+

@@ -89,6 +89,7 @@ public class UserServiceImpl implements UserService {
         LoginResponse loginResponse = new LoginResponse();
         user.setLoggedIn(true);
         userRepository.save(user);
+
         loginResponse.setMessage("Successfully logged in!");
         return loginResponse;
     }

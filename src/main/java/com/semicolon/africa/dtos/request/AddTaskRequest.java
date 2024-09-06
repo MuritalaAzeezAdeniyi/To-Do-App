@@ -6,9 +6,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
-@Document
 public class AddTaskRequest {
     private String title;
     private String note;
     private String UseEmail;
+
 }

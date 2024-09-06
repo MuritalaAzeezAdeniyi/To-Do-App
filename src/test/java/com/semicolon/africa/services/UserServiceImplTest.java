@@ -1,5 +1,6 @@
 package com.semicolon.africa.services;
 
+import com.semicolon.africa.data.model.User;
 import com.semicolon.africa.data.repository.UserRepos;
 import com.semicolon.africa.dtos.request.CreateUserRequest;
 import com.semicolon.africa.dtos.request.DeleteUserRequest;
@@ -13,6 +14,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.concurrent.Callable;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -87,9 +90,29 @@ class UserServiceImplTest {
         deleteUserRequest.setId(response.getId());
         DeleteUserResponse deleteUserResponse = userService.deleteUser("66d7a3ff58090c40371e1110");
         assertThat(deleteUserResponse.getMessage()).isEqualTo("User successfully deleted!");
-
-
-
     }
 
+    @Test
+    public void testCanFindUserByEmail(){
+
+        assertTrue(userRepos.existsByEmail("azeez"));
+
+//        User user = userRepos.findByEmail("azeez").orElseThrow();
+//        assertThat(user.getEmail()).isEqualTo("azeez");
     }
+    @Test
+    public void testThatUserCanSignUp(){
+        CreateUserRequest createUserRequest = new CreateUserRequest();
+        createUserRequest.setFirstName("akin");
+        createUserRequest.setLastName("oye");
+        createUserRequest.setEmail("ayu@email");
+        createUserRequest.setPhone("08109643956");
+        createUserRequest.setPassword("6666");
+        CreateUserResponse createUserResponse = userService.signUp(createUserRequest);
+        assertEquals(1, 1);
+        assertThat(createUserResponse.getEmail()).isEqualTo("ayu@email");
+    }
+}
+
+
+
