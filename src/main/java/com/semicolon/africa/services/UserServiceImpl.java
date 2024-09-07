@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UpdateUserResponse updateUser(UpdateUserRequest updateUserRequest) {
-        User user = userRepository.findUsersByEmail(updateUserRequest.getEmail());
+        User user = userRepository.findUserByEmail(updateUserRequest.getEmail());
         if (user != null) {
             user.setFirsName(updateUserRequest.getFirstName());
             user.setLastName(updateUserRequest.getLastName());
@@ -106,9 +106,7 @@ public class UserServiceImpl implements UserService {
     public void EmailVerification(String email) {
         boolean existByEmail = userRepository.existsByEmail(email);
         if (existByEmail) throw new EmailAlreadyExistException("User already exist!");
-        {
 
-        }
     }
 
     private void phoneNumberValidation(String phone) {
@@ -127,9 +125,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private User findByEmail(String email) {
+    public User findByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new EmailAlreadyExistException(email + "does not exist"));
+                .orElseThrow(() -> new EmailAlreadyExistException(email + " does not exist"));
 
     }
 

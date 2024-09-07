@@ -5,8 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AddTaskResponse {
-   private String id;
-    private String UserEmail;
+public class DeleteTaskResponse {
     private String message;
 }
