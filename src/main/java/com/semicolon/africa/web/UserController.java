@@ -62,11 +62,11 @@ public class UserController {
         }
    }
 
-    @PostMapping("/confirm")
-    public String confirm(@RequestBody ConfirmTokenDto confirmTokenDto) {
-
-         return  emailServices.confirmOTP(confirmTokenDto);
-
-    }
+//    @PostMapping("/confirm")
+//    public String confirm(@RequestBody ConfirmTokenDto confirmTokenDto) {
+//
+//         return  emailServices.confirmOTP(confirmTokenDto);
+//
+//    }
 
 }

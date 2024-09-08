@@ -4,6 +4,7 @@ import com.semicolon.africa.data.model.Task;
 import com.semicolon.africa.data.model.User;
 import com.semicolon.africa.data.repository.TaskRepo;
 import com.semicolon.africa.dtos.request.AddTaskRequest;
+import com.semicolon.africa.dtos.request.FindAllRequest;
 import com.semicolon.africa.dtos.request.UpdateTaskRequest;
 import com.semicolon.africa.dtos.response.AddTaskResponse;
 import com.semicolon.africa.dtos.response.DeleteTaskResponse;
@@ -14,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +31,10 @@ public class TaskServiceImpl implements TaskService {
         User user = findByEmail(addTaskRequest.getUserEmail());
         if (!user.isLoggedIn())
             throw new LoginException("User is not logged in");
+        Optional<Task> taskOptional = Optional.ofNullable(taskRepository.findByTitle(addTaskRequest.getTitle()));
+        if (taskOptional.isPresent()) {
+            throw new LoginException("Task already exists");
+        }
 
         Task newTask = new Task();
         newTask.setTitle(addTaskRequest.getTitle());
@@ -70,8 +75,13 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getTaskByUserEmail(String email) {
-        return List.of();
+    public String FindAll(FindAllRequest findAllRequest) {
+        Optional<User> userOptional = Optional.ofNullable(userService.findByEmail(findAllRequest.getEmail()));
+        User user = userOptional.get();
+        if (userOptional.isPresent()) {
+            return taskRepository.findTaskByEmail(user.getEmail()).toString();
+        }
+        return null;
     }
 
 
@@ -82,5 +92,11 @@ public class TaskServiceImpl implements TaskService {
     private Task findByTitle(String title) {
         return taskRepository.findByTitle(title);
     }
+
+    private Task findTaskByUserEmail(String email) {
+        return taskRepository.findTaskByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Task with" + email + "not found"));
+    }
+
 
 }

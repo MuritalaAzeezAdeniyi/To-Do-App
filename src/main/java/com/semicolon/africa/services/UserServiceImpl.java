@@ -10,6 +10,7 @@ import com.semicolon.africa.dtos.response.DeleteUserResponse;
 import com.semicolon.africa.dtos.response.LoginResponse;
 import com.semicolon.africa.dtos.response.UpdateUserResponse;
 import com.semicolon.africa.exeception.EmailAlreadyExistException;
+import com.semicolon.africa.exeception.InvalidEmailException;
 import com.semicolon.africa.exeception.InvalidPasswordException;
 import com.semicolon.africa.exeception.RegisterValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,25 @@ public class UserServiceImpl implements UserService {
     @Autowired
      private EmailSenderServices emailSenderServices;
 
+//    @Override
+//    public CreateUserResponse signUp(CreateUserRequest createUserRequest) {
+//        EmailVerification(createUserRequest.getEmail());
+//        RegisterValidation(createUserRequest);
+//        phoneNumberValidation(createUserRequest.getPhone());
+//        User user = new User();
+//        user.setFirsName(createUserRequest.getFirstName());
+//        user.setLastName(createUserRequest.getLastName());
+//        user.setPassword(hashPassword(createUserRequest.getPassword()));
+//        user.setPhone(createUserRequest.getPhone());
+//        userRepository.save(user);
+//        String userId = user.getId();
+//        emailSenderServices.sendOTPVerificationMail(userId, createUserRequest.getEmail());
+//        CreateUserResponse createUserResponse = new CreateUserResponse();
+//        createUserResponse.setEmail(createUserRequest.getEmail());
+//        createUserResponse.setMessage("Token sent to mail successfully");
+//        return createUserResponse;
+//    }
+
     @Override
     public CreateUserResponse signUp(CreateUserRequest createUserRequest) {
         EmailVerification(createUserRequest.getEmail());
@@ -35,16 +55,14 @@ public class UserServiceImpl implements UserService {
         user.setFirsName(createUserRequest.getFirstName());
         user.setLastName(createUserRequest.getLastName());
         user.setPassword(hashPassword(createUserRequest.getPassword()));
+        user.setEmail(createUserRequest.getEmail());
         user.setPhone(createUserRequest.getPhone());
         userRepository.save(user);
-        String userId = user.getId();
-        emailSenderServices.sendOTPVerificationMail(userId, createUserRequest.getEmail());
         CreateUserResponse createUserResponse = new CreateUserResponse();
         createUserResponse.setEmail(createUserRequest.getEmail());
-        createUserResponse.setMessage("Token sent to mail successfully");
+        createUserResponse.setMessage("Successfully registered!");
         return createUserResponse;
     }
-
 
     @Override
     public UpdateUserResponse updateUser(UpdateUserRequest updateUserRequest) {
@@ -89,6 +107,11 @@ public class UserServiceImpl implements UserService {
     public void EmailVerification(String email) {
         boolean existByEmail = userRepository.existsByEmail(email);
         if (existByEmail) throw new EmailAlreadyExistException("User already exist!");
+        if (!email.contains("@") || !email.endsWith(".com")){
+            throw new InvalidEmailException("invalid email format");
+
+    }
+
 
     }
 

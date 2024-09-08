@@ -1,6 +1,6 @@
 package com.semicolon.africa;
 
-import com.semicolon.africa.services.UserServiceImpl;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

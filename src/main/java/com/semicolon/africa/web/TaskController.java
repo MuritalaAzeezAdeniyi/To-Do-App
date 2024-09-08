@@ -1,7 +1,6 @@
 package com.semicolon.africa.web;
 
 import com.semicolon.africa.dtos.request.AddTaskRequest;
-import com.semicolon.africa.dtos.request.DeleteTaskRequest;
 import com.semicolon.africa.dtos.request.UpdateTaskRequest;
 import com.semicolon.africa.dtos.response.AddTaskResponse;
 import com.semicolon.africa.dtos.response.ApiResponse;
@@ -23,30 +22,35 @@ public class TaskController {
         try {
             AddTaskResponse addTaskResponse = taskService.addTask(addTaskRequest);
             return new ResponseEntity<>(new ApiResponse(true, addTaskResponse), HttpStatus.CREATED);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
     @PatchMapping("/updateTask")
     public ResponseEntity<?> updateTask(@RequestBody UpdateTaskRequest updateTaskRequest) {
-       try{
-           UpdateTaskResponse updateTaskResponse = taskService.updateTask(updateTaskRequest);
-           return new ResponseEntity<>(new ApiResponse(true, updateTaskResponse), HttpStatus.OK);
-       }catch (Exception e) {
-           return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-       }
+        try {
+            UpdateTaskResponse updateTaskResponse = taskService.updateTask(updateTaskRequest);
+            return new ResponseEntity<>(new ApiResponse(true, updateTaskResponse), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
 
 
     }
+
     @DeleteMapping("/deleteTask/{Task_Id}")
-    public ResponseEntity<?> deleteTask(@PathVariable ("Task_Id") String Task_Id ) {
-        try{
+    public ResponseEntity<?> deleteTask(@PathVariable("Task_Id") String Task_Id) {
+        try {
             DeleteTaskResponse deleteTaskResponse = taskService.deleteTask(Task_Id);
             return new ResponseEntity<>(new ApiResponse(true, deleteTaskResponse), HttpStatus.OK);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
+//        @GetMapping("/user")
+//    public List<Task> displayTask(@PathVariable String email) {
+//        return taskService.displayTask(email);
+//    }
 }
 
