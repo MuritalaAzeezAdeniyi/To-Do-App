@@ -1,10 +1,8 @@
 package com.semicolon.africa.web;
 
+import com.semicolon.africa.data.model.Otp;
 import com.semicolon.africa.data.model.User;
-import com.semicolon.africa.dtos.request.CreateUserRequest;
-import com.semicolon.africa.dtos.request.DeleteUserRequest;
-import com.semicolon.africa.dtos.request.LoginRequest;
-import com.semicolon.africa.dtos.request.UpdateUserRequest;
+import com.semicolon.africa.dtos.request.*;
 import com.semicolon.africa.dtos.response.*;
 import com.semicolon.africa.services.EmailSenderServices;
 import com.semicolon.africa.services.UserService;
@@ -12,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping
@@ -63,9 +63,9 @@ public class UserController {
    }
 
     @PostMapping("/confirm")
-    public String  confirm(@RequestBody String email,String otp) {
+    public String confirm(@RequestBody ConfirmTokenDto confirmTokenDto) {
 
-         return  emailServices.confirmOTP(otp,email);
+         return  emailServices.confirmOTP(confirmTokenDto);
 
     }
 

@@ -26,25 +26,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
      private EmailSenderServices emailSenderServices;
 
-//    @Override
-//    public CreateUserResponse signUp(CreateUserRequest createUserRequest) {
-//        EmailVerification(createUserRequest.getEmail());
-//        RegisterValidation(createUserRequest);
-//        phoneNumberValidation(createUserRequest.getPhone());
-//        User user = new User();
-//        user.setFirsName(createUserRequest.getFirstName());
-//        user.setLastName(createUserRequest.getLastName());
-//        user.setPassword(hashPassword(createUserRequest.getPassword()));
-//        user.setPhone(createUserRequest.getPhone());
-//        userRepository.save(user);
-//        String userId = user.getId();
-//        emailSenderServices.sendOTPVerificationMail(userId, createUserRequest.getEmail());
-//        CreateUserResponse createUserResponse = new CreateUserResponse();
-//        createUserResponse.setEmail(createUserRequest.getEmail());
-//        createUserResponse.setMessage("Token sent to mail successfully");
-//        return createUserResponse;
-//    }
-
     @Override
     public CreateUserResponse signUp(CreateUserRequest createUserRequest) {
         EmailVerification(createUserRequest.getEmail());
@@ -54,14 +35,16 @@ public class UserServiceImpl implements UserService {
         user.setFirsName(createUserRequest.getFirstName());
         user.setLastName(createUserRequest.getLastName());
         user.setPassword(hashPassword(createUserRequest.getPassword()));
-        user.setEmail(createUserRequest.getEmail());
         user.setPhone(createUserRequest.getPhone());
         userRepository.save(user);
+        String userId = user.getId();
+        emailSenderServices.sendOTPVerificationMail(userId, createUserRequest.getEmail());
         CreateUserResponse createUserResponse = new CreateUserResponse();
         createUserResponse.setEmail(createUserRequest.getEmail());
-        createUserResponse.setMessage("Successfully registered!");
+        createUserResponse.setMessage("Token sent to mail successfully");
         return createUserResponse;
     }
+
 
     @Override
     public UpdateUserResponse updateUser(UpdateUserRequest updateUserRequest) {

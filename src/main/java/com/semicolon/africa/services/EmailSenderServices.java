@@ -4,6 +4,7 @@ import com.semicolon.africa.data.model.Otp;
 import com.semicolon.africa.data.model.User;
 import com.semicolon.africa.data.repository.OtpRepo;
 import com.semicolon.africa.data.repository.UserRepos;
+import com.semicolon.africa.dtos.request.ConfirmTokenDto;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -65,16 +67,22 @@ import java.util.Optional;
             otpRepo.save(otp);
             return generated;
         }
-    public String confirmOTP(String userConfirmationOtp, String email) {
+    public String confirmOTP(ConfirmTokenDto confirmTokenDto) {
             for (Otp otp : otpRepo.findAll()) {
-                if(userConfirmationOtp.equals(otp.getOtpCode())) {
-                    User user = userRepos.findById(otp.getUserId()).get();
-                    user.setEmail(email);
+                if(confirmTokenDto.getToken() == otp.getOtpCode()) {
+                    Optional<User> user = userRepos.findById(otp.getUserId());
+                    user.get().setEmail(confirmTokenDto.getEmail());
+
+////                    if(user.isPresent()) {
+//                        user.setEmail(confirmTokenDto.getEmail());
+//                    }
                 }
                 else {
-                    throw new RuntimeException("OTP code does not match");
+                    throw new RuntimeException("OTP code does not match any otp in our database");
                 }
             }
          return "email verified";
+
         }
+
 }
