@@ -15,8 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.concurrent.Callable;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
@@ -45,7 +43,7 @@ class UserServiceImplTest {
         createUserRequest.setLastName("Muritual");
         createUserRequest.setEmail("murital@gmail.com");
         createUserRequest.setPassword("Murital");
-        createUserRequest.setPhone("O8109643956");
+        createUserRequest.setPhoneNumber("O8109643956");
         CreateUserResponse createUserResponse = userService.signUp(createUserRequest);
         return createUserResponse;
     }
@@ -106,12 +104,22 @@ class UserServiceImplTest {
         createUserRequest.setFirstName("akin");
         createUserRequest.setLastName("oye");
         createUserRequest.setEmail("ayu@email");
-        createUserRequest.setPhone("08109643956");
+        createUserRequest.setPhoneNumber("08109643956");
         createUserRequest.setPassword("6666");
         CreateUserResponse createUserResponse = userService.signUp(createUserRequest);
         assertEquals(1, 1);
         assertThat(createUserResponse.getEmail()).isEqualTo("ayu@email");
     }
+    @Test
+    public void testThatFindByEmail(){
+        User user = new User();
+        user.setEmail("Taye@gmail.com");
+        userRepos.save(user);
+        boolean exists = userRepos.existsByEmail("Taye@gmail.com");
+        assertTrue(exists);
+    }
+
+
 }
 
 

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,7 +29,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public AddTaskResponse addTask(AddTaskRequest addTaskRequest) {
-        User user = findByEmail(addTaskRequest.getUserEmail());
+        User user = userService.findByEmail((addTaskRequest.getUserEmail()));
         if (!user.isLoggedIn())
             throw new LoginException("User is not logged in");
         Optional<Task> taskOptional = Optional.ofNullable(taskRepository.findByTitle(addTaskRequest.getTitle()));
@@ -38,18 +39,19 @@ public class TaskServiceImpl implements TaskService {
 
         Task newTask = new Task();
         newTask.setTitle(addTaskRequest.getTitle());
-        newTask.setNote(addTaskRequest.getNote());
-        newTask.setEmail(addTaskRequest.getUserEmail());
+        newTask.setDescription(addTaskRequest.getDescription());
+        newTask.setUserEmail(addTaskRequest.getUserEmail());
         newTask.setDueDate(LocalDate.now());
         newTask.setCompleted(true);
         taskRepository.save(newTask);
+        user.getTasks().add(newTask);
+        userService.userTask(user);
         AddTaskResponse addTaskResponse = new AddTaskResponse();
         addTaskResponse.setUserEmail(addTaskRequest.getUserEmail());
         addTaskResponse.setMessage("Task added successfully");
         return addTaskResponse;
 
     }
-
     @Override
     public UpdateTaskResponse updateTask(UpdateTaskRequest updateTaskRequest) {
         Task newTask = findByTitle(updateTaskRequest.getTitle());
@@ -57,7 +59,7 @@ public class TaskServiceImpl implements TaskService {
             throw new RuntimeException("Task with" + updateTaskRequest.getTitle() + "not found");
         }
         newTask.setTitle(updateTaskRequest.getTitle());
-        newTask.setNote(updateTaskRequest.getNote());
+        newTask.setDescription(updateTaskRequest.getNote());
         newTask.setDueDate(LocalDate.now());
         newTask.setCompleted(true);
         taskRepository.save(newTask);
@@ -75,28 +77,33 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public String FindAll(FindAllRequest findAllRequest) {
-        Optional<User> userOptional = Optional.ofNullable(userService.findByEmail(findAllRequest.getEmail()));
-        User user = userOptional.get();
-        if (userOptional.isPresent()) {
-            return taskRepository.findTaskByEmail(user.getEmail()).toString();
-        }
+    public Task disPlayTaskByUser(FindAllRequest findAllRequest) {
         return null;
     }
 
+//    @Override
+//    public Task disPlayTaskByUser(FindAllRequest findAllRequest) {
+//        return taskRepository.findByEmail(findAllRequest.getEmail());
+//    }
 
-    private User findByEmail(String email) {
-        return userService.findByEmail(email);
+    @Override
+    public List<Task> findAll(String email) {
+        User foundUser = userService.findByEmail(email);
+        return foundUser.getTasks();
     }
+
+//    private User findByEmail(String email) {
+//        return userService.findByEmail(email);
+//    }
 
     private Task findByTitle(String title) {
         return taskRepository.findByTitle(title);
     }
 
-    private Task findTaskByUserEmail(String email) {
-        return taskRepository.findTaskByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Task with" + email + "not found"));
-    }
+//    private Task findTaskByUserEmail(String email) {
+//        return taskRepository.findTaskByUserEmail(email)
+//                .orElseThrow(() -> new RuntimeException("Task with" + email + "not found"));
+//    }
 
 
 }

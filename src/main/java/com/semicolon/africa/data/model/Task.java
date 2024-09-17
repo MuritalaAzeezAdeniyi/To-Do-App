@@ -14,8 +14,9 @@ public class Task {
     @Id
     private String id;
     private String title;
-    private String note;
+    private String description;
     private boolean completed;
     private LocalDate dueDate;
-    private String Email;
+    private String userEmail;
+
 }

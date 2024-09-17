@@ -11,7 +11,9 @@ import java.util.Optional;
 @Repository
 public interface TaskRepo extends MongoRepository<Task, String> {
      Task findByTitle(String title);
-     Optional<Task> findTaskByEmail(String email);
+//     Optional<Task> findTaskByUserEmail(String email);
+//     List<Task> findByEmail(String email);
+
 
 
 }

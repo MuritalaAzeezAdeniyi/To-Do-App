@@ -13,15 +13,16 @@ import com.semicolon.africa.exeception.EmailAlreadyExistException;
 import com.semicolon.africa.exeception.InvalidEmailException;
 import com.semicolon.africa.exeception.InvalidPasswordException;
 import com.semicolon.africa.exeception.RegisterValidationException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+   PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Autowired
     private UserRepos userRepository;
     @Autowired
@@ -50,13 +51,13 @@ public class UserServiceImpl implements UserService {
     public CreateUserResponse signUp(CreateUserRequest createUserRequest) {
         EmailVerification(createUserRequest.getEmail());
         RegisterValidation(createUserRequest);
-        phoneNumberValidation(createUserRequest.getPhone());
+        phoneNumberValidation(createUserRequest.getPhoneNumber());
         User user = new User();
         user.setFirsName(createUserRequest.getFirstName());
         user.setLastName(createUserRequest.getLastName());
         user.setPassword(hashPassword(createUserRequest.getPassword()));
         user.setEmail(createUserRequest.getEmail());
-        user.setPhone(createUserRequest.getPhone());
+        user.setPhone(createUserRequest.getPhoneNumber());
         userRepository.save(user);
         CreateUserResponse createUserResponse = new CreateUserResponse();
         createUserResponse.setEmail(createUserRequest.getEmail());
@@ -125,7 +126,7 @@ public class UserServiceImpl implements UserService {
         if (createUserRequest.getLastName().trim().isEmpty() ||
                 createUserRequest.getPassword().trim().isEmpty() ||
                 createUserRequest.getEmail().trim().isEmpty() ||
-                createUserRequest.getPhone().trim().isEmpty() ||
+                createUserRequest.getPhoneNumber().trim().isEmpty() ||
                 createUserRequest.getFirstName().trim().isEmpty()) {
             throw new RegisterValidationException("Wrong detail entered!");
         }
@@ -135,6 +136,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new EmailAlreadyExistException(email + " does not exist"));
 
+    }
+
+    @Override
+    public void userTask(User user) {
+        userRepository.save(user);
     }
 
 

@@ -12,9 +12,17 @@ import java.util.List;
 
 public interface TaskService {
     AddTaskResponse addTask(AddTaskRequest addTaskRequest);
-    UpdateTaskResponse updateTask(UpdateTaskRequest updateTaskRequest);
-    DeleteTaskResponse deleteTask(String taskId);
-    String FindAll(FindAllRequest findAllRequest);
-    
 
+    UpdateTaskResponse updateTask(UpdateTaskRequest updateTaskRequest);
+
+    DeleteTaskResponse deleteTask(String taskId);
+
+    Task disPlayTaskByUser(FindAllRequest findAllRequest);
+
+//    List<Task> getTasksByEmail(String email);
+
+    List<Task> findAll(String email);
 }
+
+
+

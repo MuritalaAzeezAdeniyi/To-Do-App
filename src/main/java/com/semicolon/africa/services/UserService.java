@@ -16,7 +16,7 @@ public interface UserService {
     LoginResponse login(LoginRequest loginRequest);
     DeleteUserResponse deleteUser(String id);
     User findByEmail(String email);
-
+    void userTask(User user);
 
 
 }

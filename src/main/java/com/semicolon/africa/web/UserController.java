@@ -7,6 +7,7 @@ import com.semicolon.africa.dtos.response.*;
 import com.semicolon.africa.services.EmailSenderServices;
 import com.semicolon.africa.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.origin.Origin;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,19 +16,20 @@ import java.util.List;
 
 @RestController
 @RequestMapping
+@CrossOrigin(origins = "*")
 public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
      private EmailSenderServices emailServices;
-    @PostMapping("/signUp")
 
+    @PostMapping("/signUp")
     public ResponseEntity<?> signUp(@RequestBody CreateUserRequest createUserRequest) {
         try {
             CreateUserResponse createUserResponse = userService.signUp(createUserRequest);
             return new ResponseEntity<> (new ApiResponse(true, createUserResponse), HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<> (e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<> (e.getMessage(),HttpStatus.BAD_GATEWAY);
 
         }
 
@@ -51,6 +53,7 @@ public class UserController {
             return new ResponseEntity<> (e.getMessage(),HttpStatus.BAD_REQUEST);
         }
    }
+
    @DeleteMapping("/deleteUser{id}")
    public ResponseEntity<?> deleteUser(@PathVariable("id") String id) {
         try{
